@@ -1,0 +1,7 @@
+dashboard:
+  enabled: true
+  domain: traefik-ui.node1
+kubernetes:
+  namespaces:
+    - default
+    - kube-system
