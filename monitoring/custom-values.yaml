@@ -1,0 +1,47 @@
+global:
+  rbacEnable: true
+
+alertmanager:
+spec:
+  volumeMounts:
+  - mountPath: "/"
+    name: samba-share-volume
+  volumes:
+  - name: samba-share-volume
+    persistentVolumeClaim:
+      claimName: samba-share-claim
+
+prometheus:
+spec:
+  volumeMounts:
+  - mountPath: "/"
+    name: samba-share-volume
+  volumes:
+  - name: samba-share-volume
+    persistentVolumeClaim:
+      claimName: samba-share-claim
+
+grafana:
+  auth:
+    anonymous:
+      enabled: "false"
+  adminPassword: "YourPass123#"
+  ingress:
+    enabled: true
+    annotations:
+      kubernetes.io/ingress.class: traefik
+      kubernetes.io/tls-acme: "true"
+    hosts: 
+      - grafana.woowee.local
+    tls:
+      - secretName: grafana-tls
+        hosts:
+          - grafana.woowee.local
+  spec:
+    volumeMounts:
+    - mountPath: "/var/lib/grafana"
+      name: samba-share-volume
+    volumes:
+    - name: samba-share-volume
+      persistentVolumeClaim:
+        claimName: samba-share-claim

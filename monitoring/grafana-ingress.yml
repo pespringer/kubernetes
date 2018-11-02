@@ -1,0 +1,15 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: grafana-web-ui
+  namespace: monitoring
+  annotations:
+    kubernetes.io/ingress.class: traefik
+spec:
+  rules:
+  - host: grafana.woowee.local
+    http:
+      paths:
+      - backend:
+          serviceName: mon-grafana
+          servicePort: 80

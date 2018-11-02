@@ -1,0 +1,57 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: plex
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: plex
+    spec:
+      containers:
+      - name: plex
+        image: plexinc/pms-docker
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 32400
+          name: plex
+        - containerPort: 32400
+          name: plex-udp
+          protocol: UDP
+        - containerPort: 32469
+          name: plex2
+        - containerPort: 32469
+          name: plex2-udp
+          protocol: UDP
+        - containerPort: 5353
+          name: plex3-udp
+          protocol: UDP
+        - containerPort: 1900
+          name: plex4-udp
+          protocol: UDP
+        env:
+        - name: PUID
+          value: "1000"
+        - name: PGID
+          value: "1000"
+        - name: VERSION
+          value: "latest"
+        - name: TZ
+          value: "US/Eastern"
+        - name: PLEX_CLAIM
+          value: "claim-j1psLr4qxE9svBHuBqfs"
+        - name: ADVERTISE_IP
+          value: "http://10.0.1.61:32400/"
+        volumeMounts:
+        - name: plex
+          mountPath: /config
+        - name: plex-media
+          mountPath: /data
+      volumes:
+      - name: plex-media
+        hostPath:
+          path: /mnt/media1
+      - name: plex
+        hostPath:
+          path: /tmp
